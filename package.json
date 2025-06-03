@@ -1,0 +1,48 @@
+{
+	"name": "@nette/vite-plugin",
+	"version": "1.0.0",
+	"description": "Nette plugin for Vite",
+	"keywords": [
+		"nette",
+		"vite",
+		"vite-plugin"
+	],
+	"type": "module",
+	"license": "MIT",
+	"author": "David Grudl",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/nette/vite-plugin"
+	},
+	"homepage": "https://doc.nette.org/en/assets/vite",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"files": [
+		"dist"
+	],
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		}
+	},
+	"peerDependencies": {
+		"vite": "^6.0.0"
+	},
+	"devDependencies": {
+		"@nette/eslint-plugin": "^0.1.2",
+		"@types/node": "^22.15.29",
+		"eslint": "^9.26.0",
+		"mocha": "^11.2.2",
+		"tsx": "^4.19.4",
+		"typescript": "^5.8.3",
+		"typescript-eslint": "^8.32.1"
+	},
+	"scripts": {
+		"build": "tsc",
+		"prepare": "npm run build",
+		"test": "npx tsx node_modules/mocha/bin/mocha \"tests/**/*.ts\"",
+		"lint": "eslint --cache",
+		"lint:fix": "eslint --cache --fix"
+	}
+}
