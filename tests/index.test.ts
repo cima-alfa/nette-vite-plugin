@@ -223,4 +223,40 @@ describe('vite-plugin-nette', () => {
 			plugin.configureServer(mockDevServer);
 		});
 	});
+
+	describe('entry configuration', () => {
+		it('should set rollupOptions.input from entry (string)', () => {
+			fs.mkdirSync('www', { recursive: true });
+			const plugin = vitePluginNette({ entry: 'app.js' });
+			const userConfig = {};
+			const config = plugin.config(userConfig);
+			const input = config.build.rollupOptions.input;
+			assert.deepEqual(
+				input,
+				[path.resolve('assets', 'app.js')],
+			);
+		});
+
+		it('should set rollupOptions.input from entry (array)', () => {
+			fs.mkdirSync('www', { recursive: true });
+			const plugin = vitePluginNette({ entry: ['app.js', 'admin.js'] });
+			const userConfig = {};
+			const config = plugin.config(userConfig);
+			const input = config.build.rollupOptions.input;
+			assert.deepEqual(
+				input,
+				['assets/app.js', 'assets/admin.js'].map((p) => path.resolve(p)),
+			);
+		});
+
+		it('should not prefix absolute entry paths', () => {
+			fs.mkdirSync('www', { recursive: true });
+			const absPath = path.resolve('some/abs.js');
+			const plugin = vitePluginNette({ entry: absPath });
+			const userConfig = {};
+			const config = plugin.config(userConfig);
+			const input = config.build.rollupOptions.input;
+			assert.deepEqual(input, [absPath]);
+		});
+	});
 });

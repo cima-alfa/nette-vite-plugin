@@ -4,6 +4,7 @@ import { defaultAllowedOrigins, HttpServer, type PluginOption, ResolvedConfig, t
 
 interface PluginConfig {
 	infoFile?: string;
+	entry?: string | string[];
 }
 
 let resolvedConfig: ResolvedConfig;
@@ -63,22 +64,32 @@ function getDefaultOutDir(): string {
 export default function vitePluginNette(config: PluginConfig = {}): PluginOption {
 	pluginConfig = {
 		infoFile: config.infoFile ?? '.vite/nette.json',
+		entry: config.entry,
 	};
 
 	return {
 		name: 'vite-plugin-nette',
 
 		config(userConfig) {
+			let root = userConfig.root ?? 'assets';
 			let protocol = userConfig.server?.https ? 'https' : 'http';
 			let host = userConfig.server?.host || 'localhost';
+			let entry;
+			if (pluginConfig.entry) {
+				entry = (Array.isArray(pluginConfig.entry) ? pluginConfig.entry : [pluginConfig.entry])
+					.map((entry) => path.resolve(root, entry));
+			}
 
 			return {
-				root: userConfig.root ?? 'assets',
+				root,
 				base: userConfig.base ?? '',
 				build: {
 					manifest: userConfig.build?.manifest ?? true,
 					outDir: userConfig.build?.outDir ?? getDefaultOutDir(),
 					assetsDir: userConfig.build?.assetsDir ?? '',
+					rollupOptions: {
+						input: entry,
+					},
 				},
 				server: {
 					cors: userConfig.server?.cors ?? {
