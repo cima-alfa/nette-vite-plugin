@@ -1,6 +1,6 @@
 {
 	"name": "@nette/vite-plugin",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "Nette plugin for Vite",
 	"keywords": [
 		"nette",
