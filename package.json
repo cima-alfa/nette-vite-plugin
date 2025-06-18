@@ -12,7 +12,7 @@
 	"author": "David Grudl",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/nette/vite-plugin"
+		"url": "git+https://github.com/nette/vite-plugin.git"
 	},
 	"homepage": "https://doc.nette.org/en/assets/vite",
 	"main": "dist/index.js",
