@@ -26,22 +26,30 @@ function writeJson(filePath: string, data: any): void {
  * Also sets the Vite server's `origin` to the same URL for use elsewhere.
  */
 function generateInfoFile(httpServer: HttpServer): void {
+	let infoFilePath = path.resolve(
+		resolvedConfig.root,
+		resolvedConfig.build.outDir,
+		pluginConfig.infoFile!,
+	);
+
 	httpServer.on('listening', () => {
 		let protocol = resolvedConfig.server.https ? 'https' : 'http';
 		let host = resolvedConfig.server.host || 'localhost';
 		let port = (httpServer.address() as any).port;
 		let devServerUrl = `${protocol}://${host}:${port}`;
 
-		let infoFilePath = path.resolve(
-			resolvedConfig.root,
-			resolvedConfig.build.outDir,
-			pluginConfig.infoFile!,
-		);
-
 		writeJson(infoFilePath, { devServer: devServerUrl });
 
 		// Update Vite server's origin field so other parts of Vite or downstream tools can pick it up
 		resolvedConfig.server.origin = devServerUrl;
+	});
+
+	httpServer.on('close', () => {
+		fs.rmSync(infoFilePath, { force: true });
+	});
+
+	process.on('SIGINT', () => {
+		httpServer.close(() => process.exit(0));
 	});
 }
 

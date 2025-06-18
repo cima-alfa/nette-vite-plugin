@@ -69,6 +69,46 @@ describe('info file generation', () => {
 		plugin.configureServer(mockDevServer);
 	});
 
+	it('should remove info file on close', (done) => {
+		const plugin = vitePluginNette();
+
+		// Mock resolved config
+		const mockConfig = {
+			command: 'serve',
+			root: process.cwd(),
+			build: { outDir: path.join(process.cwd(), 'www', 'assets') },
+			server: { https: false, host: 'localhost', origin: '' },
+		};
+		plugin.configResolved(mockConfig);
+
+		const mockDevServer = {
+			httpServer: {
+				on: (event, callback) => {
+					if (event === 'listening') {
+						setTimeout(() => {
+							callback();
+						}, 10);
+					}
+
+					if (event === 'close') {
+						setTimeout(() => {
+							callback();
+
+							// Check if info file was removed
+							const infoFilePath = path.join(process.cwd(), 'www', 'assets', '.vite', 'nette.json');
+							assert.ok(!fs.existsSync(infoFilePath), 'Info file should be removed');
+
+							done();
+						}, 10);
+					}
+				},
+				address: () => ({ port: 5173 }),
+			},
+		};
+
+		plugin.configureServer(mockDevServer);
+	});
+
 	it('should generate HTTPS info file when HTTPS is enabled', (done) => {
 		const plugin = vitePluginNette();
 
