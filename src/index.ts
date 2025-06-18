@@ -26,7 +26,7 @@ function writeJson(filePath: string, data: any): void {
  * Also sets the Vite server's `origin` to the same URL for use elsewhere.
  */
 function generateInfoFile(httpServer: HttpServer): void {
-	httpServer.once('listening', () => {
+	httpServer.on('listening', () => {
 		let protocol = resolvedConfig.server.https ? 'https' : 'http';
 		let host = resolvedConfig.server.host || 'localhost';
 		let port = (httpServer.address() as any).port;

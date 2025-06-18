@@ -41,7 +41,7 @@ describe('info file generation', () => {
 
 		const mockDevServer = {
 			httpServer: {
-				once: (event, callback) => {
+				on: (event, callback) => {
 					if (event === 'listening') {
 						// Simulate server listening
 						setTimeout(() => {
@@ -83,7 +83,7 @@ describe('info file generation', () => {
 
 		const mockDevServer = {
 			httpServer: {
-				once: (event, callback) => {
+				on: (event, callback) => {
 					if (event === 'listening') {
 						setTimeout(() => {
 							callback();
@@ -117,7 +117,7 @@ describe('info file generation', () => {
 
 		const mockDevServer = {
 			httpServer: {
-				once: (event, callback) => {
+				on: (event, callback) => {
 					if (event === 'listening') {
 						setTimeout(() => {
 							callback();
@@ -150,7 +150,7 @@ describe('info file generation', () => {
 
 		const mockDevServer = {
 			httpServer: {
-				once: (event, callback) => {
+				on: (event, callback) => {
 					if (event === 'listening') {
 						setTimeout(() => {
 							callback();
@@ -185,7 +185,7 @@ describe('info file generation', () => {
 
 		const mockDevServer = {
 			httpServer: {
-				once: (event, callback) => {
+				on: (event, callback) => {
 					if (event === 'listening') {
 						setTimeout(() => {
 							callback();

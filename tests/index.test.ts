@@ -184,7 +184,7 @@ describe('vite-plugin-nette', () => {
 
 			const mockDevServer = {
 				httpServer: {
-					once: (event, callback) => {
+					on: (event, callback) => {
 						if (event === 'listening') {
 							// Simulate server listening
 							setTimeout(() => {
@@ -213,13 +213,13 @@ describe('vite-plugin-nette', () => {
 
 			const mockDevServer = {
 				httpServer: {
-					once: () => {
+					on: () => {
 						throw new Error('Should not be called for build command');
 					},
 				},
 			};
 
-			// Should not throw or call httpServer.once
+			// Should not throw or call httpServer.on
 			plugin.configureServer(mockDevServer);
 		});
 	});
