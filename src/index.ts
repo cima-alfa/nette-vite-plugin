@@ -35,14 +35,14 @@ function generateInfoFile(httpServer: HttpServer): void {
 
 	httpServer.on('listening', () => {
 		let protocol = resolvedConfig.server.https ? 'https' : 'http';
-		let host = resolvedConfig.server.host || 'localhost';
+		let host = pluginConfig.host || resolvedConfig.server.host || 'localhost';
 		let port = (httpServer.address() as any).port;
 
 		// Accessing from http://0.0.0.0:{port} causes redirects to localhost
 		if (host === true || host === '0.0.0.0') {
 			host = 'localhost';
 		}
-		
+
 		let devServerUrl = `${protocol}://${host}:${port}`;
 
 		writeJson(infoFilePath, { devServer: devServerUrl });
@@ -89,7 +89,7 @@ export default function vitePluginNette(config: PluginConfig = {}): PluginOption
 		config(userConfig) {
 			let root = userConfig.root ?? 'assets';
 			let protocol = userConfig.server?.https ? 'https' : 'http';
-			let host = pluginConfig.host || userConfig.server?.host || 'localhost';
+			let host = userConfig.server?.host || 'localhost';
 			let entry;
 			if (pluginConfig.entry) {
 				entry = (Array.isArray(pluginConfig.entry) ? pluginConfig.entry : [pluginConfig.entry])
