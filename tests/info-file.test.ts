@@ -185,7 +185,7 @@ describe('info file generation', () => {
 			command: 'serve',
 			root: process.cwd(),
 			build: { outDir: path.join(process.cwd(), 'www', 'assets') },
-			server: { https: false, origin: '' },
+			server: { https: false, host: true, origin: '' },
 		};
 		plugin.configResolved(mockConfig);
 
