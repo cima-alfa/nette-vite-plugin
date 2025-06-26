@@ -89,11 +89,16 @@ export default function vitePluginNette(config: PluginConfig = {}): PluginOption
 		config(userConfig) {
 			let root = userConfig.root ?? 'assets';
 			let protocol = userConfig.server?.https ? 'https' : 'http';
-			let host = userConfig.server?.host || 'localhost';
+			let host = pluginConfig.host || userConfig.server?.host || 'localhost';
 			let entry;
+
 			if (pluginConfig.entry) {
 				entry = (Array.isArray(pluginConfig.entry) ? pluginConfig.entry : [pluginConfig.entry])
 					.map((entry) => path.resolve(root, entry));
+			}
+
+			if (host === true || host === '0.0.0.0') {
+				host = 'localhost';
 			}
 
 			return {
@@ -114,6 +119,7 @@ export default function vitePluginNette(config: PluginConfig = {}): PluginOption
 							`${protocol}://${host}`,
 						],
 					},
+					allowedHosts: userConfig.server?.allowedHosts ?? host === 'localhost' ? undefined : [host], // Custom host needs to be included to work properly during docker development
 					origin: '', // will be overridden later in generateInfoFile()
 				},
 			};
