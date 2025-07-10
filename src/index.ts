@@ -38,16 +38,17 @@ function generateInfoFile(httpServer: HttpServer): void {
 		let host = pluginConfig.host || resolvedConfig.server.host || 'localhost';
 		let port = (httpServer.address() as any).port;
 
-		// Accessing from http://0.0.0.0:{port} causes redirects to localhost
+		// Accessing from http://0.0.0.0:{port} causes redirects to localhost.
 		if (host === true || host === '0.0.0.0') {
 			host = 'localhost';
 		}
 
-		let devServerUrl = `${protocol}://${host}:${port}`;
+		// Port 80 does not need to be included in the URL.
+		let devServerUrl = port === 80 ? `${protocol}://${host}` : `${protocol}://${host}:${port}`;
 
 		writeJson(infoFilePath, { devServer: devServerUrl });
 
-		// Update Vite server's origin field so other parts of Vite or downstream tools can pick it up
+		// Update Vite server's origin field so other parts of Vite or downstream tools can pick it up.
 		resolvedConfig.server.origin = devServerUrl;
 	});
 
